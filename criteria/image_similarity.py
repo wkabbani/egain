@@ -7,6 +7,8 @@ import image_similarity_measures
 from sys import argv
 from image_similarity_measures.quality_metrics import fsim, issm, sre, uiq
 from sewar.full_ref import mse, rmse, psnr, uqi, ssim, ergas, scc, rase, sam, msssim, vifp
+from skimage.metrics import peak_signal_noise_ratio as psnr
+from skimage.metrics import structural_similarity as ssim
 
 def calculate_vifp(img1, img2):
     img1 = img1.numpy()
@@ -124,3 +126,21 @@ def calculate_uiq(img1, img2):
     img2 = img2.transpose((1,2,0))
 
     return uiq(img2, img1)
+
+def calculate_psnr(img1, img2):
+    img1 = img1.numpy()
+    img2 = img2.numpy()
+
+    img1 = img1.transpose((1,2,0))
+    img2 = img2.transpose((1,2,0))
+
+    return psnr(img2, img1, data_range=img2.max() - img2.min())
+
+def calculate_ssim(img1, img2):
+    img1 = img1.numpy()
+    img2 = img2.numpy()
+
+    img1 = img1.transpose((1,2,0))
+    img2 = img2.transpose((1,2,0))
+
+    return ssim(img2, img1, data_range=img2.max() - img2.min(), multichannel=True)

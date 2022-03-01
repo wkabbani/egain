@@ -54,7 +54,7 @@ class Coach:
 			self.moco_loss = moco_loss.MocoLoss().to(self.device).eval()
 
 		# Initialize optimizer
-		if self.opts.my_model:
+		if self.opts.egain_model:
 			self.optimizer = self.configure_optimizers_v2()
 		else:
 			self.optimizer = self.configure_optimizers_v1()

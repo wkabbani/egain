@@ -4,7 +4,6 @@ from PIL import Image
 import matplotlib.pyplot as plt
 
 
-# Log images
 def log_input_image(x, opts):
 	if opts.label_nc == 0:
 		return tensor2im(x)
@@ -31,13 +30,6 @@ def tensor2map(var):
 		mask_image[mask == class_idx] = colors[class_idx]
 	mask_image = mask_image.astype('uint8')
 	return Image.fromarray(mask_image)
-
-
-def tensor2sketch(var):
-	im = var[0].cpu().detach().numpy()
-	im = cv2.cvtColor(im, cv2.COLOR_GRAY2BGR)
-	im = (im * 255).astype(np.uint8)
-	return Image.fromarray(im)
 
 
 # Visualization utils

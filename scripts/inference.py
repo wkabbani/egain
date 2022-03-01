@@ -51,7 +51,7 @@ def run():
     net = pSp(opts)
     net.eval()
     net.cuda()
-    
+
     print('net constructed')
 
     print('Loading dataset for {}'.format(opts.dataset_type))

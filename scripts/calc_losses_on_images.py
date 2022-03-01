@@ -13,9 +13,7 @@ sys.path.append("..")
 
 from criteria.lpips.lpips import LPIPS
 from datasets.gt_res_dataset import GTResDataset
-from criteria.ssim import calculate_ssim
-from criteria.psnr import calculate_psnr
-from criteria.more import calculate_vifp, calculate_msssim, calculate_sam, calculate_rase, calculate_scc, calculate_ergas, calculate_uqi, calculate_rmse, calculate_mse, calculate_fsim, calculate_issm, calculate_sre, calculate_uiq
+from criteria.image_similarity import calculate_vifp, calculate_msssim, calculate_sam, calculate_rase, calculate_scc, calculate_ergas, calculate_uqi, calculate_rmse, calculate_mse, calculate_fsim, calculate_issm, calculate_sre, calculate_uiq, calculate_ssim, calculate_psnr
 
 def parse_args():
 	parser = ArgumentParser(add_help=False)

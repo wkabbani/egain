@@ -1,6 +1,3 @@
-"""
-This file defines the core research contribution
-"""
 import matplotlib
 matplotlib.use('Agg')
 import math
@@ -32,24 +29,21 @@ class pSp(nn.Module):
 		pprint.pprint(self.opts)
 		# compute number of style inputs based on the output resolution
 		self.opts.n_styles = int(math.log(self.opts.output_size, 2)) * 2 - 2
+
 		# Define architecture
 		self.encoder = self.set_encoder()
 		self.decoder = self.set_decoder()
 		self.face_pool = torch.nn.AdaptiveAvgPool2d((256, 256))
 
-		# self.residue =  psp_encoders.ResidualEncoder()
-  
-		# external fusion >>
+		self.residue =  psp_encoders.ResidualEncoder()
 		self.fusion = psp_encoders.SimpleFusionModule()
-		# external fusion <<
 
 		# Load weights if needed
 		self.load_encoder_weights()
 		self.load_decoder_weights()
-		# self.load_residue_weights()
-		# external fusion >>
+		self.load_residue_weights()
 		self.load_fusion_weights()
-		# external fusion <<
+
 
 	def set_decoder(self):
 		if self.opts.decoder_type == 'StyleGanGenerator':
@@ -102,16 +96,15 @@ class pSp(nn.Module):
 			self.__load_latent_avg(decoder_ckpt, alternative_avg, repeat=self.opts.n_styles)
 
 	def load_residue_weights(self):
-		if self.opts.residue_checkpoint_path is not None:
-			ckpt = torch.load(self.opts.residue_checkpoint_path, map_location='cpu')
+		if self.opts.egain_checkpoint_path is not None:
+			ckpt = torch.load(self.opts.egain_checkpoint_path, map_location='cpu')
 			self.residue.load_state_dict(get_keys(ckpt, 'residue'), strict=True)
 
-	# external fusion >>
 	def load_fusion_weights(self):
-		if self.opts.residue_checkpoint_path is not None:
-			ckpt = torch.load(self.opts.residue_checkpoint_path, map_location='cpu')
+		if self.opts.egain_checkpoint_path is not None:
+			ckpt = torch.load(self.opts.egain_checkpoint_path, map_location='cpu')
 			self.fusion.load_state_dict(get_keys(ckpt, 'fusion'), strict=True)
-	# external fusion <<
+
 
 	def forward(self, x, resize=True, latent_mask=None, input_code=False, randomize_noise=True,
 	            inject_latent=None, return_latents=False, alpha=None):
@@ -169,13 +162,7 @@ class pSp(nn.Module):
 			return images
 
 	def img_difference(self, original_images, generated_images):
-
-		# print(f'original_images shape: {original_images.shape}')
-		# print(f'generated_images shape: {generated_images.shape}')
-
 		batch_size = original_images.shape[0]
-		# print(f'batch_size is {batch_size}')
-
 		diff_results = []
 		for i in range(batch_size):
 			org_image = tensor2im(original_images[i])
@@ -187,7 +174,6 @@ class pSp(nn.Module):
 			gen_image = gen_image.resize((256, 256))
 
 			diff = ImageChops.difference(org_image, gen_image)
-			# diff = torch.from_numpy(np.asarray(diff))
 
 			img_transforms = transforms.Compose([
 				transforms.Resize((256, 256)),
@@ -200,7 +186,6 @@ class pSp(nn.Module):
 		diff_results = torch.stack(diff_results)
 		diff_results = diff_results.to("cuda").float()
 
-		# print(f'diff_results shape: {diff_results.shape}')
 		return diff_results
 
 	def set_opts(self, opts):

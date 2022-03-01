@@ -1,11 +1,6 @@
 dataset_paths = {
-	# pSp
 	'celeba_train': '',
 	'celeba_test': '/work3/s193503/datasets/celeba_test',
-	'celeba_train_sketch': '',
-	'celeba_test_sketch': '',
-	'celeba_train_segmentation': '',
-	'celeba_test_segmentation': '',
 	'ffhq': '/work3/s193503/datasets/ffhq'
 }
 

@@ -50,12 +50,12 @@ class TrainOptions:
 		# arguments for super-resolution
 		self.parser.add_argument('--resize_factors', type=str, default=None, help='For super-res, comma-separated resize factors to use for inference.')
 
-		# my stuff
+		# egain args
+		self.parser.add_argument('--egain_model', action="store_true", help='Whether to run my model')
 		self.parser.add_argument('--decoder_type', default='StyleGanGenerator', type=str, help='Which generator to use')
 		self.parser.add_argument('--swagan_weights', default=model_paths['swagan_ffhq'], type=str, help='Path to SWAGAN model weights')
 		self.parser.add_argument('--train_encoder', action="store_true", help='Whether to train the encoder model')
-		self.parser.add_argument('--my_model', action="store_true", help='Whether to run my model')
-		self.parser.add_argument('--residue_checkpoint_path', default=None, type=str, help='Path to pSp model checkpoint')
+		self.parser.add_argument('--egain_checkpoint_path', default=None, type=str, help='Path to egain model checkpoint')
 
 	def parse(self):
 		opts = self.parser.parse_args()
